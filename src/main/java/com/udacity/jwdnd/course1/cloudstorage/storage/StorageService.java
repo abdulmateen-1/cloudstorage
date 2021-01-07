@@ -1,22 +1,23 @@
 package com.udacity.jwdnd.course1.cloudstorage.storage;
 
-import org.springframework.core.io.Resource;
+import com.udacity.jwdnd.course1.cloudstorage.model.File;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Path;
-import java.util.stream.Stream;
+import java.util.List;
 
+@Component
 public interface StorageService {
 
-    void init();
+    Integer store(MultipartFile file, Integer userId);
 
-    void store(MultipartFile file);
+    File getByUserName(String username);
 
-    Stream<Path> loadAll();
+    List<File> getAllByUserId(Integer userId);
 
-    Path load(String filename);
+    File getById(int fileId);
 
-    Resource loadAsResource(String filename);
+    void delete(int fileId);
 
-    void deleteAll();
+
 }
