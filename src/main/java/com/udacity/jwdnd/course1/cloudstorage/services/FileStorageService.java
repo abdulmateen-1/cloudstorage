@@ -26,7 +26,7 @@ public class FileStorageService implements StorageService {
 
             File file = new File(null, multipartFile.getOriginalFilename(), multipartFile.getContentType(),
                     String.valueOf(multipartFile.getSize()), userId, multipartFile.getBytes());
-            return fileMapper.store(file, userId);
+            return this.fileMapper.store(file, userId);
         } catch (IOException e) {
             throw new StorageException("Failed to store file.", e);
         }
@@ -48,7 +48,11 @@ public class FileStorageService implements StorageService {
     }
 
     @Override
-    public void delete(int fileId) {
-        fileMapper.delete(fileId);
+    public int delete(int fileId) {
+        return fileMapper.delete(fileId);
+    }
+
+    public boolean isFileNameAvailable(String filename) {
+        return fileMapper.getByUserName(filename) == null;
     }
 }

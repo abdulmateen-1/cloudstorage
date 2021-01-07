@@ -28,15 +28,17 @@
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
+
+            <!--    UPLOAD FILES TO CLOUD        -->
             <div class="tab-pane fade show active" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">
-                <form action="#" enctype="multipart/form-data" method="POST">
+                <form action="#" th:action="@{/upload/file}" th:object="${fileDTO}" enctype="multipart/form-data" method="POST">
                     <div class="container">
                         <div class="row" style="margin: 1em;">
                             <div class="col-sm-2">
                                 <label for="fileUpload">Upload a New File:</label>
                             </div>
                             <div class="col-sm-6">
-                                <input type="file" class="form-control-file" id="fileUpload" name="fileUpload">
+                                <input type="file" th:field="*{file}" class="form-control-file" id="fileUpload" name="fileUpload">
                             </div>
                             <div class="col-sm-4">
                                 <button type="submit" class="btn btn-dark">Upload</button>
@@ -53,12 +55,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td th:each="file : ${files}">
+                        <tr th:id="${file.fileId}" th:each="file : ${files}">
+                            <td >
                                 <a th:href="${/view/file/{fileId}(fileId=${file.fileId})}" id="view-button" target="_blank" class="btn btn-success">View</a>
                                 <a th:href="${/delete/file/{fileId}(fileId=${file.fileId})}" id="delete-button" class="btn btn-danger">Delete</a>
                             </td>
-                            <th scope="row">ExampleFile.txt</th>
+                            <th th:text="${file.filename}" scope="row">ExampleFile.txt</th>
                         </tr>
                         </tbody>
                     </table>

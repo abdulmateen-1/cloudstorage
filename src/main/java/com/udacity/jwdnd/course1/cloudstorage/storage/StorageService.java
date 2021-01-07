@@ -17,7 +17,7 @@ public interface StorageService {
 
     File getById(int fileId);
 
-    void delete(int fileId);
+    int delete(int fileId);
 
 
 }
