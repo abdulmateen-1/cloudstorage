@@ -20,11 +20,11 @@ public interface FileMapper{
     List<File> getAllByUserId(Integer userId);
 
     @Insert("INSERT INTO FILES (filename, contenttype, filesize, userid, filedata) " +
-            "VALUES(#{filename}, #{contentType}, #{fileSize}, #{userId}, #{fileData})")
+            "VALUES(#{fileName}, #{contentType}, #{fileSize}, #{userId}, #{fileData})")
     @Options(useGeneratedKeys = true, keyProperty = "fileId")
-    Integer store(File files, Integer userId);
+    Integer store(File file);
 
-    @Delete("DELETE FROM FILE WHERE fileId = #{fileId}")
+    @Delete("DELETE FROM FILES WHERE fileId = #{fileId}")
     int delete(int fileId);
 
 }

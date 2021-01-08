@@ -14,22 +14,23 @@ import java.util.List;
 @Service
 public class FileStorageService implements StorageService {
 
-    @Autowired
-    private FileMapper fileMapper;
+    private final FileMapper fileMapper;
+
+    public FileStorageService(FileMapper fileMapper) {
+        this.fileMapper = fileMapper;
+    }
 
     @Override
-    public Integer store(MultipartFile multipartFile, Integer userId) {
-        try {
-            if (multipartFile.isEmpty()) {
-                throw new StorageException("Failed to store empty file.");
-            }
+    public Integer store(MultipartFile multipartFile, Integer userId) throws IOException {
+        // Convert the uploaded file under MultipartFile into FileForm
+        // before storing to db:
+        // filename, contenttype, filesize, userid, filedata
 
-            File file = new File(null, multipartFile.getOriginalFilename(), multipartFile.getContentType(),
-                    String.valueOf(multipartFile.getSize()), userId, multipartFile.getBytes());
-            return this.fileMapper.store(file, userId);
-        } catch (IOException e) {
-            throw new StorageException("Failed to store file.", e);
-        }
+        File file = new File(null, multipartFile.getOriginalFilename(),
+                multipartFile.getContentType(), String.valueOf(multipartFile.getSize()),
+                userId, multipartFile.getBytes());
+
+        return this.fileMapper.store(file);
     }
 
     @Override

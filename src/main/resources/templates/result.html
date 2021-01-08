@@ -1,28 +1,46 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
 
-        <title>Result</title>
-    </head>
-    <body class="p-3 mb-2 bg-light text-black">
-        <div class="container justify-content-center w-50 p-3" style="margin-top: 5em;">
-            <div id="success-message" th:if="${updateSuccess}" class="alert alert-success fill-parent">
-                <h1 class="display-5">Success</h1>
-                <span>Your changes were successfully saved. Click <a id="success-redirect" th:href="@{/home}">here</a> to continue.</span>
-            </div>
-            <div id="error-message" th:if="${updateFail}" class="alert alert-danger fill-parent">
-                <h1 class="display-5">Error</h1>
-                <span>Your changes were not saved. Click <a>here</a> to continue.</span>
-            </div>
-            <div class="alert alert-danger fill-parent">
-                <h1 class="display-5">Error</h1>
-                <span th:text="${message}">Example Error Message</span>
-                <span>Click <a id="error-redirect" th:href="@{/home}">here</a> to continue.</span>
-            </div>
-        </div>
-    </body>
+    <title>Result</title>
+</head>
+<body class="p-3 mb-2 bg-light text-black">
+<div class="container justify-content-center w-50 p-3" style="margin-top: 5em;">
+    <div id="success-message" th:if="${updateSuccess}"
+         class="alert alert-success fill-parent">
+        <h1 class="display-5">Success</h1>
+        <span>Your changes were successfully saved. Click
+                    <a id="success-redirect" th:href="@{/home}">here
+                    </a> to continue.</span>
+    </div>
+    <div id="error-message" th:if="${updateFailed}"
+         class="alert alert-danger fill-parent">
+        <h1 class="display-5">Error</h1>
+        <span th:text="${updateFailed}"></span>
+        <span>Your changes were not saved. Click
+            <a id="error-redirect" th:href="@{/home}">here</a> to continue.</span>
+    </div>
+    <!--    <div id="delete-message" th:if="${deleteSuccess}"-->
+    <!--        class="alert alert-success fill-parent">-->
+    <!--        <h1 class="display-5">DELETED</h1>-->
+    <!--        <span>The file was deleted successfully!!!,-->
+    <!--            click <a id="delete-success" th:href="@{/home}">here</a>-->
+    <!--            to go back to the home page.-->
+    <!--        </span>-->
+    <!--    </div>-->
+    <!--    <div id="delete-error" th:if="${deleteFail}"-->
+    <!--         class="alert alert-danger fill-parent">-->
+    <!--        <h1 class="display-5">DELETED</h1>-->
+    <!--        <span th:text="${deleteFail}">The file was deleted successfully!!!,-->
+    <!--            click <a id="error" th:href="@{/home}">here</a>-->
+    <!--            to go back to the home page.-->
+    <!--        </span>-->
+    <!--    </div>-->
+
+</div>
+</body>
 </html>
