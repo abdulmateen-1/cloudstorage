@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 
@@ -30,6 +31,11 @@ public class FileController {
     public FileController(FileStorageService fileStorageService, UserMapper userMapper) {
         this.fileStorageService = fileStorageService;
         this.userMapper = userMapper;
+    }
+
+    @PostConstruct
+    public void postFileConstruct() {
+        System.out.println("Creating the files controller bean");
     }
 
     /*
@@ -75,8 +81,12 @@ public class FileController {
         int currentUserId = user.getUserId();
 
         //Edge Cases
-        if (file.isEmpty())
+        if (file.isEmpty()){
             message = "File should not be empty";
+            model.addAttribute("updateFailed", message);
+            return "result";
+        }
+
 
         if (fileStorageService.isFileNameAvailable(file.getOriginalFilename())) {
             //Upload files to Files db by fileId;

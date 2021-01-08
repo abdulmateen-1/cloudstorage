@@ -1,8 +1,10 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.dto.FileDTO;
+import com.udacity.jwdnd.course1.cloudstorage.dto.NoteDTO;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileStorageService;
+import com.udacity.jwdnd.course1.cloudstorage.services.NotesService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,15 +19,17 @@ import java.security.Principal;
 public class HomeController {
 
     //Fields including the service
-    private FileStorageService fileStorageService;
-    private UserService userService;
-
+    private final FileStorageService fileStorageService;
+    private final UserService userService;
+    private final NotesService notesService;
     //Constructor
 
 
-    public HomeController(FileStorageService fileStorageService, UserService userService) {
+    public HomeController(FileStorageService fileStorageService, UserService userService,
+                          NotesService notesService) {
         this.fileStorageService = fileStorageService;
         this.userService = userService;
+        this.notesService = notesService;
     }
 
     @ModelAttribute("fileDTO")
@@ -33,10 +37,14 @@ public class HomeController {
         return new FileDTO();
     }
 
+    @ModelAttribute("noteDTO")
+    public NoteDTO getNoteDTO() {return new NoteDTO(); }
+
     @GetMapping()
-    public String viewHome(Model model, Principal principal) {
+    public String viewHome(Model model, Principal principal) throws Exception {
         User user = this.userService.getUser(principal.getName());
         model.addAttribute("files", fileStorageService.getAllByUserId(user.getUserId()));
+        model.addAttribute("notes", notesService.getAllNote(user.getUserId()));
         return "home";
     }
 

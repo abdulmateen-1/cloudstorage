@@ -20,7 +20,7 @@
 
 <!--        &lt;!&ndash;                </form>&ndash;&gt;-->
         <form action="#" method="POST">
-            <button type="submit" class="btn btn-secondary float-right">
+            <button type="submit" class="logout btn btn-secondary float-right">
                 <a id="logout-link" th:href="@{/login}">Logout</a>
             </button>
         </form>
@@ -86,10 +86,10 @@
 
             <!--       NOTES             -->
             <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
-                <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()">
+                <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()" id="new-notes">
                     + Add/Edit a Note
                 </button>
-
+                <h2 id="note-size" th:text="${noteSize}">note number</h2>
                 <div class="table-responsive">
                     <table class="table table-striped" id="userTable">
                         <thead>
@@ -100,17 +100,17 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:field="${note.noteId}" th:each="note:${notes}">
+                        <tr th:field="${note.noteId}" th:each="note : ${notes}">
                             <td>
                                 <button type="button" class="btn btn-success"
                                         th:onclick="javascript: showNoteModal([[${note.noteId}]],[[${note.noteTitle}]], [[${note.noteDescription}]])"
-                                > Edit </button>
-                                <a class="btn btn-danger"
+                                id="edit-note"> Edit </button>
+                                <a class="btn btn-danger" id="delete-note"
                                    th:href="@{/home/note/delete/{noteId}(noteId=${note.noteId})}"
                                 > Delete </a>
                             </td>
-                            <th scope="row" th:text="${note.noteTitle}">Example Note Title</th>
-                            <td th:text="${note.noteDescription}">Example Note Description </td>
+                            <th id="notetitle" scope="row" th:text="${note.noteTitle}">Example Note Title</th>
+                            <td id="notedescription" th:text="${note.noteDescription}">Example Note Description </td>
                         </tr>
                         </tbody>
                     </table>
@@ -126,7 +126,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="#" th:action="@{/home/note/newNote}" th:object="${newNote}" method="POST">
+                                <form action="#" th:action="@{/home/note/newNote}" th:object="${noteDTO}" method="POST">
                                     <input type="hidden" name="noteId" id="note-id">
                                     <div class="form-group">
                                         <label for="note-title" class="col-form-label">Title</label>

@@ -1,17 +1,17 @@
-package com.udacity.jwdnd.course1.cloudstorage.model;
+package com.udacity.jwdnd.course1.cloudstorage.dto;
 
-public class Note {
+public class NoteDTO {
     private Integer noteId;
     private String noteTitle;
     private String noteDescription;
-    private Integer userId;
 
-    public Note(Integer noteId, String noteTitle, String noteDescription, Integer userId) {
+    public NoteDTO(Integer noteId, String noteTitle, String noteDescription) {
         this.noteId = noteId;
         this.noteTitle = noteTitle;
         this.noteDescription = noteDescription;
-        this.userId = userId;
     }
+
+    public NoteDTO() {}
 
     public Integer getNoteId() {
         return noteId;
@@ -33,15 +33,7 @@ public class Note {
         return noteDescription;
     }
 
-    public void setNonDescription(String noteDescription) {
+    public void setNoteDescription(String noteDescription) {
         this.noteDescription = noteDescription;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 }
