@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 @ControllerAdvice
 public class ExceptionController {
 
-    private static String errorPage = "error";
-
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ModelAndView handleMaxSizeException(
             MaxUploadSizeExceededException exceededException,

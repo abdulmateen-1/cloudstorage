@@ -36,7 +36,7 @@ public class NotesController {
     @PostMapping("/home/note/newNote")
     public String postNewNote(@ModelAttribute("noteDTO") NoteDTO note, Authentication auth, Model model) {
         //Adding a new note
-        String message = null;
+        String message;
         if (note.getNoteId() == null) {
             notesService.addNote(note, auth);
             model.addAttribute("updateSuccess", true);
