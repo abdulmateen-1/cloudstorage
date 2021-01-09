@@ -16,11 +16,9 @@ import javax.annotation.PostConstruct;
 @Controller
 public class NotesController {
     private final NotesService notesService;
-    private final UserService userService;
 
     public NotesController(NotesService notesService, UserService userService) {
         this.notesService = notesService;
-        this.userService = userService;
     }
 
     @PostConstruct

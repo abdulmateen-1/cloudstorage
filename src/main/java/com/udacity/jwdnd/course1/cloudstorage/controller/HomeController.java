@@ -3,10 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 import com.udacity.jwdnd.course1.cloudstorage.dto.FileDTO;
 import com.udacity.jwdnd.course1.cloudstorage.dto.NoteDTO;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
-import com.udacity.jwdnd.course1.cloudstorage.services.CredentialsService;
-import com.udacity.jwdnd.course1.cloudstorage.services.FileStorageService;
-import com.udacity.jwdnd.course1.cloudstorage.services.NotesService;
-import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +19,9 @@ public class HomeController {
     //Auto injection
     @Autowired
     private CredentialsService credentialsService;
+
+    @Autowired
+    private EncryptionService encryptionService;
 
     //Fields including the service
     private final FileStorageService fileStorageService;
@@ -51,6 +51,7 @@ public class HomeController {
         model.addAttribute("files", fileStorageService.getAllByUserId(user.getUserId()));
         model.addAttribute("notes", notesService.getAllNote(user.getUserId()));
         model.addAttribute("credentials", credentialsService.getAllCredentials(user.getUserId()));
+        model.addAttribute("encryptionService", encryptionService);
         return "home";
     }
 

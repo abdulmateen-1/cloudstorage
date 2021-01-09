@@ -87,10 +87,10 @@
             <!--       NOTES             -->
             <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
                 <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()"
-                        id="new-notes">
+                        id="add-note">
                     + Add/Edit a Note
                 </button>
-
+                <h2 id="note-size"></h2>
                 <div class="table-responsive">
                     <table class="table table-striped" id="userTable">
                         <thead>
@@ -146,7 +146,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" onclick="$('#noteSubmit').click();">Save
+                                <button type="button" id="note-modal" class="btn btn-primary" onclick="$('#noteSubmit').click();">Save
                                     changes
                                 </button>
                             </div>
@@ -160,7 +160,7 @@
             <div class="tab-pane fade" id="nav-credentials" role="tabpanel" aria-labelledby="nav-credentials-tab">
                 <button style="margin: 0.25em;" type="button" class="btn btn-info float-right"
                         onclick="showCredentialModal()"
-                        id="new-credentials">
+                        id="add-credentials">
                     + Add a New Credential
                 </button>
 
@@ -178,15 +178,17 @@
                         <tr th:field="${credential.credentialId}" th:each="credential : ${credentials}">
                             <td>
                                 <button type="button" class="btn btn-success"
-                                        th:onclick="javascript: showCredentialModal([[${credential.credentialId}]], [[${credential.url}]], [[credential.username]], [[credential.password]])"
+                                        th:attr="decrypted-password=${encryptionService.decryptValue(credential.password, credential.key)}"
+                                        th:onclick="javascript: showCredentialModal([[${credential.credentialId}]],
+                                         [[${credential.url}]], [[${credential.username}]], this.getAttribute('decrypted-password'))"
                                         id="edit-credential">Edit
                                 </button>
                                 <a class="btn btn-danger" id="delete-credential"
                                    th:href="@{/home/credential/delete/{credentialId}(credentialId=${credential.credentialId})}">Delete</a>
                             </td>
-                            <th scope="row" id="url" th:text="credential.url">Example Credential URL</th>
-                            <td id="username" th:text="credential.username">Example Credential Username</td>
-                            <td id="password" th:text="credential.password">Example Credential Password</td>
+                            <th scope="row" id="url" th:text="${credential.url}">Example Credential URL</th>
+                            <td id="username" th:text="${credential.username}">Example Credential Username</td>
+                            <td id="password" th:text="${credential.password}">Example Credential Password</td>
                         </tr>
                         </tbody>
                     </table>
@@ -203,7 +205,8 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="#" method="POST" th:action="@{/home/credential/newCredential}" th:object="${credentialDTO}">
+                                <form action="#" method="POST" th:action="@{/home/credential/newCredential}"
+                                      th:object="${credentialDTO}">
                                     <input type="hidden" name="credentialId" id="credential-id">
                                     <div class="form-group">
                                         <label for="note-title" class="col-form-label">URL</label>
@@ -225,7 +228,8 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" onclick="$('#credentialSubmit').click();">
+                                <button id="credential-modal-button" type="button" class="btn btn-primary"
+                                        onclick="$('#credentialSubmit').click();">
                                     Save changes
                                 </button>
                             </div>
@@ -259,6 +263,8 @@
                 $('#credential-password').val(password ? password : '');
                 $('#credentialModal').modal('show');
             }
+
+
 
 </script>
 </body>
