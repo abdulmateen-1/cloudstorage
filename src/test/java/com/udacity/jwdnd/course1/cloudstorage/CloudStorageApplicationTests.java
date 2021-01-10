@@ -1,7 +1,11 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.page.*;
+import com.udacity.jwdnd.course1.cloudstorage.services.CredentialsService;
 import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -10,14 +14,26 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ActiveProfiles("test")
 class CloudStorageApplicationTests {
+
+	@Autowired
+	EncryptionService encryptionService;
+
+	@Autowired
+	CredentialsService credentialsService;
+
+	@Autowired
+	UserService userService;
 
 	@LocalServerPort
 	public int port;
@@ -75,6 +91,27 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
+	public void signup() {
+		driver.get(BaseUrl + "/signup");
+		Assertions.assertEquals("Sign Up", driver.getTitle());
+
+		signupPage = new SignupPage(driver);
+		signupPage.signup(firstName, lastName, username, password);
+	}
+
+	public void login() {
+		driver.get(BaseUrl + "/login");
+		Assertions.assertEquals("Login", driver.getTitle());
+		loginPage = new LoginPage(driver);
+		loginPage.login(username, password);
+	}
+
+	private String getDecryptedPassword(String encryptedPassword) throws Exception {
+		User user = userService.getUser("olaM2");
+		Credential credential = credentialsService.getAllCredentials(user.getUserId()).get(0);
+		return encryptionService.decryptValue(encryptedPassword, credential.getKey());
+	}
+
 	@Test
 	@Order(3)
 	public void testValidSignupAndLoginAndLogout() {
@@ -120,19 +157,13 @@ class CloudStorageApplicationTests {
 		Assertions.assertNotEquals("Home", driver.getTitle());
 	}
 
+
+
 	@Test
 	@Order(5)
 	public void loginFunction() {
-		driver.get(BaseUrl + "/signup");
-		Assertions.assertEquals("Sign Up", driver.getTitle());
-
-		signupPage = new SignupPage(driver);
-		signupPage.signup(firstName, lastName, username, password);
-
-		driver.get(BaseUrl + "/login");
-		Assertions.assertEquals("Login", driver.getTitle());
-		loginPage = new LoginPage(driver);
-		loginPage.login(username, password);
+		signup();
+		login();
 		Assertions.assertEquals("Home", driver.getTitle());
 	}
 
@@ -168,6 +199,12 @@ class CloudStorageApplicationTests {
 		driver.get(BaseUrl + "/home");
 		wait.until(driver1 -> driver.findElement(By.id("nav-notes-tab")));
 
+
+//		List<String> finalDetail = detail;
+//		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+//			finalDetail.get(0);});
+//		Assertions.assertNotEquals("Ediz Dezcriptionz", null);
+
 		try {
 			Thread.sleep(1000);
 		} catch (Exception e) {
@@ -181,13 +218,11 @@ class CloudStorageApplicationTests {
 	@Order(7)
 	public void testAddEditDeleteCredentials() throws Exception {
 		loginFunction();
-
-
 		//Add new Credentials
 		credentialPage = new CredentialPage(driver);
 		WebDriverWait wait = new WebDriverWait(driver, 30);
-		Thread.sleep(1000);
-		WebElement navigation = driver.findElement(By.id("nav-credentials-tab"));
+		Thread.sleep(2000);
+		WebElement navigation = driver.findElement(By.className("nav-credentials"));
 		navigation.click();
 
 		credentialPage.addCredential(driver,
@@ -202,7 +237,7 @@ class CloudStorageApplicationTests {
 		List<String> detail = credentialPage.getDetail(driver);
 		Assertions.assertEquals("www.facebook.com", detail.get(0));
 		Assertions.assertEquals("userDegozaru", detail.get(1));
-//		Assertions.assertEquals("pass1234r", detail.get(2)); How to decrypt password
+		Assertions.assertEquals("pass1234", getDecryptedPassword(detail.get(2)));
 
 		//Edit the user name
 		credentialPage.editCredential(driver,
@@ -214,6 +249,7 @@ class CloudStorageApplicationTests {
 
 		Assertions.assertEquals("www.buzz.com", detail.get(0));
 		Assertions.assertEquals("whatzyourz", detail.get(1));
+		Assertions.assertEquals("pazz", getDecryptedPassword(detail.get(2)));
 	}
 
 }

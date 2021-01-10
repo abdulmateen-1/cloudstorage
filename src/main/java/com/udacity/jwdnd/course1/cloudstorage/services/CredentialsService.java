@@ -58,6 +58,7 @@ public class CredentialsService {
         String encryptedPassword = encryptionService.encryptValue(credentialDTO.getPassword(), credential.getKey());
         credential.setPassword(encryptedPassword);
         credential.setUrl(credentialDTO.getUrl());
+        credential.setUsername(credentialDTO.getUsername());
         credentialsMapper.updateCredentials(credential);
 
     }

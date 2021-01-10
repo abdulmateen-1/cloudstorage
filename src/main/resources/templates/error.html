@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
+    <title>Error</title>
+</head>
+<body class="p-3 mb-2 bg-light text-black">
+<div class="alert alert-danger fill-parent">
+    <h1 class="display-5">Error</h1>
+
+    <p>Our Engineers are working on it
+            <a id="error-redirect" th:href="@{/home}">here
+            </a> to go back to home page.
+    </p><br>
+    <span>Our Engineers are working on it
+            <a  th:href="@{/login}">here
+            </a> to go back to login page.
+    </span>
+</div>
+</body>
+</html>
