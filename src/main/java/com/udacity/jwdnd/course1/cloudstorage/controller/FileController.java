@@ -41,13 +41,13 @@ public class FileController {
     /*
      * The Get method from the http Request allows modification to be made
      * to the database. this reduce what we have to do in our post request*/
-    @GetMapping("/home/file/view/{fileId}")
+    @GetMapping("/home/file/view/{fileId:.+}")
     public ResponseEntity<ByteArrayResource> viewFile(Model model, @PathVariable("fileId") int fileId) {
         File file = fileStorageService.getById(fileId);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(file.getContentType()))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline: filename=\"" + file.getFileName() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"")
                 .body(new ByteArrayResource(file.getFileData()));
     }
 
